@@ -1,4 +1,3 @@
-<script>
     function getTanksList() {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://localhost:8080/gettanks');
@@ -48,4 +47,3 @@
             alert("Request failed");
         };
     }
-</script>

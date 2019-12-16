@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b9bebb15-4ae1-440a-ad31-9ee88c112a56" name="Default Changelist" comment="" />
+    <list default="true" id="b9bebb15-4ae1-440a-ad31-9ee88c112a56" name="Default Changelist" comment="fixed errors">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gs-rest-service.iml" beforeDir="false" afterPath="$PROJECT_DIR$/tanks-battle-game-server.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manifest.yml" beforeDir="false" afterPath="$PROJECT_DIR$/manifest.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/BattleField.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/BattleField.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/battleField.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/battleField.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/BattleField.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/BattleField.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,6 +27,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
@@ -23,6 +38,7 @@
     </option>
   </component>
   <component name="ProjectId" id="1V436jTwi4SdeIOgLHzPd9H4y9n" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="flattenModules" value="true" />
     <option name="flattenPackages" value="true" />
@@ -37,6 +53,7 @@
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -65,13 +82,60 @@
   <component name="RunManager" selected="Application.Application">
     <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="hello.Application" />
-      <module name="gs-rest-service" />
+      <module name="tanks-battle-game-server" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="hello.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <module name="tanks-battle-game-server" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <module name="tanks-battle-game-server" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -119,43 +183,55 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fixed errors" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed errors" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="3048" y="209" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1576523851800">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
     <state x="3048" y="209" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576523851800" />
-    <state width="2517" height="348" key="GridCell.Tab.0.bottom" timestamp="1576524490888">
+    <state x="2850" y="-85" key="CommitChangelistDialog2" timestamp="1576525539192">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
-    <state width="2517" height="348" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576524490888" />
-    <state width="2517" height="348" key="GridCell.Tab.0.center" timestamp="1576524490887">
+    <state x="2850" y="-85" key="CommitChangelistDialog2/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525539192" />
+    <state width="2517" height="348" key="GridCell.Tab.0.bottom" timestamp="1576525512054">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
-    <state width="2517" height="348" key="GridCell.Tab.0.center/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576524490887" />
-    <state width="2517" height="348" key="GridCell.Tab.0.left" timestamp="1576524490887">
+    <state width="2517" height="348" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525512054" />
+    <state width="2517" height="348" key="GridCell.Tab.0.center" timestamp="1576525512054">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
-    <state width="2517" height="348" key="GridCell.Tab.0.left/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576524490887" />
-    <state width="2517" height="348" key="GridCell.Tab.0.right" timestamp="1576524490887">
+    <state width="2517" height="348" key="GridCell.Tab.0.center/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525512054" />
+    <state width="2517" height="348" key="GridCell.Tab.0.left" timestamp="1576525512054">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
-    <state width="2517" height="348" key="GridCell.Tab.0.right/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576524490887" />
-    <state width="2517" height="348" key="GridCell.Tab.1.bottom" timestamp="1576524490740">
+    <state width="2517" height="348" key="GridCell.Tab.0.left/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525512054" />
+    <state width="2517" height="348" key="GridCell.Tab.0.right" timestamp="1576525512054">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
-    <state width="2517" height="348" key="GridCell.Tab.1.bottom/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576524490740" />
-    <state width="2517" height="348" key="GridCell.Tab.1.center" timestamp="1576524490740">
+    <state width="2517" height="348" key="GridCell.Tab.0.right/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525512054" />
+    <state width="2517" height="348" key="GridCell.Tab.1.bottom" timestamp="1576525512054">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
-    <state width="2517" height="348" key="GridCell.Tab.1.center/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576524490740" />
-    <state width="2517" height="348" key="GridCell.Tab.1.left" timestamp="1576524490740">
+    <state width="2517" height="348" key="GridCell.Tab.1.bottom/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525512054" />
+    <state width="2517" height="348" key="GridCell.Tab.1.center" timestamp="1576525512054">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
-    <state width="2517" height="348" key="GridCell.Tab.1.left/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576524490740" />
-    <state width="2517" height="348" key="GridCell.Tab.1.right" timestamp="1576524490740">
+    <state width="2517" height="348" key="GridCell.Tab.1.center/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525512054" />
+    <state width="2517" height="348" key="GridCell.Tab.1.left" timestamp="1576525512054">
       <screen x="1920" y="-199" width="2560" height="1040" />
     </state>
-    <state width="2517" height="348" key="GridCell.Tab.1.right/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576524490740" />
+    <state width="2517" height="348" key="GridCell.Tab.1.left/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525512054" />
+    <state width="2517" height="348" key="GridCell.Tab.1.right" timestamp="1576525512054">
+      <screen x="1920" y="-199" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="348" key="GridCell.Tab.1.right/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525512054" />
+    <state x="2897" y="58" width="606" height="526" key="find.popup" timestamp="1576525347366">
+      <screen x="1920" y="-199" width="2560" height="1040" />
+    </state>
+    <state x="2897" y="58" width="606" height="526" key="find.popup/0.0.1536.824/1920.-199.2560.1040@1920.-199.2560.1040" timestamp="1576525347366" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

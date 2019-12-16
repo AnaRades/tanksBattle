@@ -16,7 +16,7 @@
 
     function populateTankList(tanksList) {
         // Get the list element and clear it
-        var list = document.getElementById('tanksList');
+        var list = document.getElementById('sel-tanks');
         list.options.length = 0;
         for (var i = 0; i < tanksList.length; i++) {
             // Create the list item:
@@ -31,7 +31,7 @@
 
     function getTankProperties() {
         let xhr = new XMLHttpRequest();
-        var tankUrl = 'http://localhost:8080/gettankprop?name='+document.getElementById('tanksList').value;
+        var tankUrl = 'http://localhost:8080/gettankprop?name='+document.getElementById('sel-tanks').value;
         xhr.open('GET', tankUrl);
         xhr.send();
 
@@ -39,7 +39,23 @@
             if(this.readyState == 4 && this.status == 200) {
                 var tank = JSON.parse(this.responseText);
                 var txt = "Tank " + tank.tankName + " has damage " + tank.damage + " and totalHealth " + tank.health;
-                document.getElementById("tankdetails").innerHTML = txt;
+                document.getElementById("ta-tankdetails").innerHTML = txt;
+            }
+        }
+
+        xhr.onerror = function() {
+            alert("Request failed");
+        };
+    }
+
+    function getMapDetails() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:8080/map');
+        xhr.send();
+
+        xhr.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+                document.getElementById("ta-mapdetails").innerHTML = this.responseText;
             }
         }
 

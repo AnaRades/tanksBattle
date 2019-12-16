@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="battleField.js"></script>
+<link rel="stylesheet" href="battleField.css">
 <head>
     <meta charset="UTF-8">
     <title>Stalingrad Battle</title>
@@ -8,16 +9,20 @@
 <body>
 
 <div class="main_window">
-    <div class="tankDetailsArea">
-        <button onclick="getTanksList()">Get Tanks list</button>
-        <select id="tanksList" disabled  onchange="getTankProperties()" size="5">Tanks List</select>
-        <textarea id="tankdetails" disabled rows="5" cols="15"> Get tanks list to view their properties</textarea>
+    <div class="tankDetailsArea grid-container">
+        <button class="btn-tankDetails infocell" onclick="getTanksList()">Get Tanks list</button>
+        <button class="btn-mapDetails infocell" onclick="getMapDetails()">Show Map</button>
+    <br>
+        <select id="sel-tanks" class="sel-tanks infocell" disabled  onchange="getTankProperties()" size="5">Tanks List</select>
+        <textarea id="ta-tankdetails" class="ta-tankdetails infocell"  disabled rows="5" cols="15"> Get tanks list to view their properties</textarea>
+        <textarea id="ta-mapdetails" class="ta-mapdetails infocell"  disabled rows="5" cols="15"> Get tanks list to view their properties</textarea>
     </div>
 
     <div class="gameArea">
-        <button>Start Battle</button>
-        <label> Battle events</label>
-        <textarea id="battleEvents" rows="25" cols="100"></textarea>
+        <button class="gameButton" onclick="startGame()">Start Battle</button>
+        <br>
+        <br>
+        <textarea id="battleEvents" class="gameEvents" rows="25" cols="100"></textarea>
     </div>
 </div>
 

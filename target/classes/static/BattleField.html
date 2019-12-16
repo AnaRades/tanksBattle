@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Stalingrad Battle</title>
 </head>
-<body>
+<body onload="init()">
 
 <div class="main_window">
     <div class="tankDetailsArea grid-container">
@@ -19,7 +19,7 @@
     </div>
 
     <div class="gameArea">
-        <button class="gameButton">Start Battle</button>
+        <button class="gameButton" onclick="startGame()">Start Battle</button>
         <br>
         <br>
         <textarea id="battleEvents" class="gameEvents" rows="25" cols="100"></textarea>

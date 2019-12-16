@@ -60,7 +60,7 @@ public class Battle {
         soviet.setOtherTank(panzer);
     }
 
-    private static void start() {
+    public static void start() {
         System.out.println("Start battle");
         boolean isSovietTurn = true;
         Tank[] tankOrder = new Tank[2];

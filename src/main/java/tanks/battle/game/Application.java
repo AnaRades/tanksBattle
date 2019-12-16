@@ -1,4 +1,4 @@
-package tanks.battle.models.tank.battle;
+package tanks.battle.game;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

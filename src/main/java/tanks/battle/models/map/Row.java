@@ -1,4 +1,4 @@
-package tanks.battle.models.tank.battle.models.map;
+package tanks.battle.models.map;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,8 @@
 package tanks.battle.models.battle;
 
 import tanks.battle.models.tank.*;
-import tanks.battle.models.tank.battle.models.map.Map;
-import tanks.battle.models.tank.battle.models.map.Row;
+import tanks.battle.models.map.Map;
+import tanks.battle.models.map.Row;
 import tanks.battle.models.tank.utils.FACING;
 import tanks.battle.models.tank.utils.MOVE;
 import tanks.battle.models.tank.utils.Position;

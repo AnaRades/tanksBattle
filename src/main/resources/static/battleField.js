@@ -71,17 +71,22 @@ var mapDetailsElement, tankDetailsElement, tankSelect;
     }
 
     function startGame() {
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8080/battle');
-        xhr.send();
-
-        xhr.onreadystatechange = function() {
-            if(this.readyState == 4 && this.status == 200) {
-
-            }
-        }
-
-        xhr.onerror = function() {
-            alert("Request failed");
+        const eventSource = new EventSource('http://localhost:8080/notification');
+        eventSource.onmessage = e => {
+            const msg = e.data;
+             console.log('event: ' + msg);
+            document.getElementById("greet").innerHTML += msg;
         };
+        eventSource.onopen = e => console.log('open');
+        eventSource.onerror = e => {
+            if (e.readyState == EventSource.CLOSED) {
+                console.log('close');
+            }
+            else {
+                console.log(e);
+            }
+        };
+        eventSource.addEventListener('second', function(e) {
+            console.log('second', e.data);
+        }, false);
     }

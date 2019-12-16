@@ -1,4 +1,4 @@
-package tanks.battle.models.tank.battle.controller;
+package tanks.battle.models.tank.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

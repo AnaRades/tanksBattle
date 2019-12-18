@@ -1,11 +1,15 @@
 package tanks.battle.models.tank;
 
+import tanks.battle.models.battle.BattleObserver;
 import tanks.battle.models.map.Map;
 import tanks.battle.models.tank.utils.FACING;
 import tanks.battle.models.tank.utils.MOVE;
 import tanks.battle.models.tank.utils.Position;
 
 public  class Tank  {
+
+    //TODO: relate tank to SSE
+    //instead of sout, add to SSE
 
     private String tankName;
     private int health;
@@ -16,6 +20,9 @@ public  class Tank  {
     private TankBehavior behavior;
     private Tank otherTank;
     private FACING facing;
+
+    private BattleObserver battleObserver;
+
 
     private enum DIRECTION {
         EAST,
@@ -29,9 +36,11 @@ public  class Tank  {
     }
 
     public MOVE makeNextMove(Map map) {
+        thinkAboutNextMove();
         //if clear shot, then shoot
-        if(map.clearShot(this.position, otherTank.position))
+        if(map.clearShot(this.position, otherTank.position)) {
             return MOVE.SHOOT;
+        }
         return MOVE.ADVANCE;
     }
 
@@ -52,13 +61,9 @@ public  class Tank  {
     //set map stalingrad gate center
 
 
-
-
-
-
     private void thinkAboutNextMove() {
         try {
-            Thread.sleep(300);
+            Thread.sleep(550);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -82,7 +87,7 @@ public  class Tank  {
     }
 
     public void shoot() {
-        System.out.format("Tank %s gives damage of %d\n", tankName, damage);
+        battleObserver.logEvent(String.format("Tank %s gives damage of %d", tankName, damage));
         otherTank.receiveDamage(damage);
     }
 
@@ -98,7 +103,7 @@ public  class Tank  {
 
     public void receiveDamage(int damage) {
         this.health -= damage;
-        System.out.format("Tank %s receives damage of %d, new health at %d\n", tankName, damage, health);
+        battleObserver.logEvent(String.format("Tank %s receives damage of %d, new health at %d", tankName, damage, health));
         if(isDead()) {
             die();
         }
@@ -113,7 +118,10 @@ public  class Tank  {
     }
 
     private void die() {
-        System.out.format("Tank %s has died\n", tankName);
+
+        System.out.format("Tank %s has died", tankName);
+
+        battleObserver.logEvent(String.format("Tank %s has died", tankName));
     }
 
     public void setHealth(int health) {
@@ -142,5 +150,9 @@ public  class Tank  {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public void setBattleObserver(BattleObserver observer) {
+        this.battleObserver = observer;
     }
 }

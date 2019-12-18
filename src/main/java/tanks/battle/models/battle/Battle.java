@@ -1,5 +1,6 @@
 package tanks.battle.models.battle;
 
+import java.util.HashMap;
 import tanks.battle.models.tank.*;
 import tanks.battle.models.map.Map;
 import tanks.battle.models.map.Row;
@@ -11,21 +12,111 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Battle {
+public class Battle extends Thread {
 
-    private static Map stalingradMap;
-    private static Tank soviet;
-    private static Tank panzer;
+    private Map stalingradMap;
+    private Tank soviet;
+    private Tank panzer;
+
+    private BattleObserver observer;
+    private String id;
+
+    private static int BATTLE_COUNT = 0;
+    private static HashMap<String, Battle> currentBattles = new HashMap<>();
+    //TODO: create static list of battles
+    //add id to battle
+
+    public Battle() {
+        id = "Battle-"+BATTLE_COUNT;
+        BATTLE_COUNT++;
+        observer = new BattleObserver();
+    }
+
 
     //to be replaced by a rest controller mapping
     //will be one of the 3 commands it receives from the client
     //get tank properties, get map, start battle
     public static void main(String[] args) {
-        init();
-//        start();
+        Battle battle = new Battle();
+        battle.init();
+        battle.startBattle();
     }
 
-    public static void init() {
+    public void init() {
+
+        currentBattles.put(id, this);
+        stalingradMap = getStalingradMap();
+
+        TankBuilder tankBuilder = new TankBuilder();
+        soviet = tankBuilder.withName("Soviet").withDamage(30).withHealth(70)
+                .withFacing(FACING.BACKWARDS).withPosition(new Position(10, 7))
+                .withObserver(observer).build();
+
+        tankBuilder = new TankBuilder();
+        panzer = tankBuilder.withName("Panzer").withDamage(40).withHealth(90)
+                .withFacing(FACING.FORWARD).withPosition(new Position(2,7))
+                .withObserver(observer).build();
+
+        panzer.setOtherTank(soviet);
+        soviet.setOtherTank(panzer);
+    }
+    public void startBattle() {
+        try {
+            this.start();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Start battle");
+        boolean isSovietTurn = true;
+        Tank currentTank;
+        while(!soviet.isDead() && !panzer.isDead()) {
+            currentTank = isSovietTurn? soviet: panzer;
+
+//          tank1 makes move1 -> roll dice -> if success make move, else do nothing
+            MOVE move = currentTank.makeNextMove(stalingradMap);
+            if(rollDice()) {
+//          if move = shoot -> tank1.shoot(tank2)
+                if (move.equals(MOVE.SHOOT)) {
+                    currentTank.shoot();
+                } else if (move.equals(MOVE.ADVANCE)) {
+
+                }
+                observer.logEvent("Move was unsuccessfull");
+            }
+//            System.out.println(observer.getLatestLog());
+            isSovietTurn = !isSovietTurn;
+        }
+    }
+
+    private static  Random random = new Random(100);
+    private static boolean rollDice() {
+        return random.nextInt()%5 < 4;
+    }
+
+    /*static getters to be replaced by retrieve from DB*/
+    public static List<String> getTankList() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Soviet");
+        list.add("Panzer");
+        return list;
+    }
+
+    public static Tank getTankByName(String name) {
+        TankBuilder tankBuilder = new TankBuilder();
+        if(name.equalsIgnoreCase("Panzer")) {
+            return tankBuilder.withName("Panzer").withDamage(4).withHealth(90).withFacing(FACING.FORWARD)
+                .withPosition(new Position(2,7)).build();
+        }
+        return  tankBuilder.withName("Soviet").withDamage(6).withHealth(70)
+            .withFacing(FACING.BACKWARDS).withPosition(new Position(10, 7))
+            .build();
+    }
+
+    public static Map getStalingradMap() {
         ArrayList<Row> rows = new ArrayList<>(11);
 
         boolean[] row1 =   new boolean[]{true, true, true, false, false, false, false, false, true, true, true, true, false, false};
@@ -44,64 +135,20 @@ public class Battle {
         for(int i=0; i<11; i++) {
             rows.add(new Row(map[i]));
         }
-        stalingradMap = new Map(rows);
+        Map stalingradMap = new Map(rows);
         System.out.println("\n"+stalingradMap+"\n");
-
-        TankBuilder tankBuilder = new TankBuilder();
-        soviet = tankBuilder.withName("Soviet").withDamage(6).withHealth(70)
-                .withFacing(FACING.BACKWARDS).withPosition(new Position(10, 7))
-                .build();
-
-        tankBuilder = new TankBuilder();
-        panzer = tankBuilder.withName("Panzer").withDamage(4).withHealth(90).withFacing(FACING.FORWARD)
-                .withPosition(new Position(2,7)).build();
-
-        panzer.setOtherTank(soviet);
-        soviet.setOtherTank(panzer);
-    }
-
-    public static void start() {
-        System.out.println("Start battle");
-        boolean isSovietTurn = true;
-        Tank[] tankOrder = new Tank[2];
-        while(!soviet.isDead() && !panzer.isDead()) {
-            tankOrder[0] = isSovietTurn? soviet: panzer;
-            tankOrder[1] = isSovietTurn? panzer: soviet;
-
-//          tank1 makes move1 -> roll dice -> if success make move, else do nothing
-            MOVE move = tankOrder[0].makeNextMove(stalingradMap);
-            if(rollDice()) {
-//          if move = shoot -> tank1.shoot(tank2)
-                if (move.equals(MOVE.SHOOT)) {
-                    tankOrder[0].shoot();
-                } else if (move.equals(MOVE.ADVANCE)) {
-
-                }
-            }
-        isSovietTurn = !isSovietTurn;
-        }
-    }
-    private static  Random random = new Random();
-    private static boolean rollDice() {
-        return random.nextBoolean();
-    }
-
-    public static List<String> getTankList() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add(soviet.getTankName());
-        list.add(panzer.getTankName());
-        return list;
-    }
-
-    public static Tank getTankByName(String name) {
-        if(name.equalsIgnoreCase("Panzer")) {
-            return panzer;
-        }
-        return soviet;
-    }
-
-    public static Map getStalingradMap() {
         return stalingradMap;
     }
 
+    public String getLatestLog() {
+        return  observer.getLatestLog();
+    }
+
+    public String getBattleId() {
+        return id;
+    }
+
+    public static Battle getBattleById(String id) {
+        return currentBattles.get(id);
+    }
 }

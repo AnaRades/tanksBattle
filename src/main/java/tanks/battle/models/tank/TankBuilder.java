@@ -1,5 +1,6 @@
 package tanks.battle.models.tank;
 
+import tanks.battle.models.battle.BattleObserver;
 import tanks.battle.models.tank.utils.FACING;
 import tanks.battle.models.tank.utils.Position;
 
@@ -8,6 +9,7 @@ public class TankBuilder {
     private int health = 100;
     private int damage = 5;
     private FACING facing;
+    private BattleObserver battleObserver;
 
     private Position position = new Position(0,0);
 
@@ -36,6 +38,11 @@ public class TankBuilder {
         return this;
     }
 
+    public TankBuilder withObserver(BattleObserver battleObserver) {
+        this.battleObserver = battleObserver;
+        return this;
+    }
+
     public Tank build() {
         Tank tank = new Tank();
 
@@ -43,6 +50,7 @@ public class TankBuilder {
         tank.setHealth(health);
         tank.setDamage(damage);
         tank.setPosition(position);
+        tank.setBattleObserver(battleObserver);
 
         return tank;
     }

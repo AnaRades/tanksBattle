@@ -47,17 +47,17 @@ public class Map {
             projectileTrajectory.add(new Pair(currentX, currentY));
         }
 
-        System.out.println("Start = " + attackerTankPosition.x() + ", " + attackerTankPosition.y());
-        System.out.println("End = " + victimTankPosition.x() + ", " + victimTankPosition.y());
+//        System.out.println("Start = " + attackerTankPosition.x() + ", " + attackerTankPosition.y());
+//        System.out.println("End = " + victimTankPosition.x() + ", " + victimTankPosition.y());
         for(Pair pair : projectileTrajectory) {
-            System.out.println("X = " + pair.x + " Y = " + pair.y);
+//            System.out.println("X = " + pair.x + " Y = " + pair.y);
             if(rows.get(pair.x).get(pair.y)) {
                 System.out.println("Obstacle found in path");
                 return false;
             }
         }
-        System.out.println("Final = " + victimTankPosition.x() + ", " + victimTankPosition.y());
-        System.out.println("Clear shot");
+//        System.out.println("Final = " + victimTankPosition.x() + ", " + victimTankPosition.y());
+//        System.out.println("Clear shot");
         return true;
     }
 

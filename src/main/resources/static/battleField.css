@@ -3,7 +3,7 @@ body {
 }
 
 .main_window {
-    max-width: 980px;
+      width: 980px;
       background-color: #aaa;
       border-style: double;
 }
@@ -21,7 +21,6 @@ body {
   background-color: #444;
   color: #fff;
   border-radius: 5px;
-
 }
 
 .btn-tankDetails {
@@ -64,4 +63,8 @@ body {
     padding-top: 5px;
     color: #aaa;
     border-radius: 10px;
+}
+
+.sel-battleevents {
+    width: 960px
 }

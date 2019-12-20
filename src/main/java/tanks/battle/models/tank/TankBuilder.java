@@ -38,11 +38,6 @@ public class TankBuilder {
         return this;
     }
 
-    public TankBuilder withObserver(BattleObserver battleObserver) {
-        this.battleObserver = battleObserver;
-        return this;
-    }
-
     public Tank build() {
         Tank tank = new Tank();
 
@@ -50,7 +45,6 @@ public class TankBuilder {
         tank.setHealth(health);
         tank.setDamage(damage);
         tank.setPosition(position);
-        tank.setBattleObserver(battleObserver);
 
         return tank;
     }

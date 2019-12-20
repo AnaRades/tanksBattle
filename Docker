@@ -1,0 +1,34 @@
+#### Stage 1: Build the application
+FROM openjdk:8-jdk-alpine as build
+
+# Set the current working directory inside the image
+mkdir tanks
+WORKDIR /tanks
+
+# Copy maven executable to the image
+COPY mvnw .
+COPY .mvn .mvn
+
+# Copy the pom.xml file
+COPY pom.xml .
+
+# Copy the project source
+COPY src src
+
+#List files in directory
+RUN ls -l
+
+# Build all the dependencies and package project
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+RUN ./mvnw.sh package
+
+#### Stage 2: A minimal docker image with command to run the app
+FROM openjdk:8-jre-alpine
+
+ARG DEPENDENCY=/tanks/target/dependency
+
+# Copy project dependencies from the build stage
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+
+
+ENTRYPOINT ["java","-cp","app:app/lib/*","tanks.Application"]

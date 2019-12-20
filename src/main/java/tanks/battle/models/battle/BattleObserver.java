@@ -25,4 +25,7 @@ public class BattleObserver {
     return latest;
   }
 
+  public String getLatestLogWithoutClear() {
+    return latestLog.toString();
+  }
 }

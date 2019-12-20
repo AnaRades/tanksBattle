@@ -8,21 +8,15 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import tanks.battle.models.battle.Battle;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 @EnableScheduling
-public class SsePushNotificationService {
+public class GameNotificationService {
 
-    final DateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
     final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
-
     private Battle battle;
 
     public void addEmitter(final SseEmitter emitter) {
@@ -40,7 +34,7 @@ public class SsePushNotificationService {
 
     @Async
     @Scheduled(fixedRate = 2000)
-    public void doNotify() throws IOException {
+    public void doNotify() {
         List<SseEmitter> deadEmitters = new ArrayList<>();
         emitters.forEach(emitter -> {
             try {

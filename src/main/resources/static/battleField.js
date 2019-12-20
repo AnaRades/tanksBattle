@@ -39,16 +39,16 @@ function populateTankList(tanksList) {
 
 function getTankProperties() {
     let xhr = new XMLHttpRequest();
-    var tankUrl = 'http://localhost:8080/gettankprop?name=' + tankSelect.value;
+    var tankUrl = 'http://localhost:8080/gettanks/' + tankSelect.value;
     xhr.open('GET', tankUrl);
     xhr.send();
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var tank = JSON.parse(this.responseText);
-            var txt = "Tank " + tank.tankName + " has damage " + tank.damage + " and totalHealth "
+            var txt = "Tank " + tank.name + " has damage " + tank.damage + " and totalHealth "
                       + tank.health;
-            tankdetails.innerHTML = txt;
+            tankDetails.innerHTML = txt;
         }
     }
 
@@ -59,7 +59,7 @@ function getTankProperties() {
 
 function getMapDetails() {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8080/map');
+    xhr.open('GET', 'http://localhost:8080/getmap');
     xhr.send();
 
     xhr.onreadystatechange = function () {
@@ -73,16 +73,12 @@ function getMapDetails() {
     };
 }
 
+/**
+    Send a POST command to server to start the game. If server responds with OK,
+    subscribe to battle event through Server Sent Events.
+    On each event, the unrequested game logs are returned. When battle is over unsubscribe and close connection
+**/
 function startGame() {
-
-   /* const msg = 'Tank Soviet gives damage of 6;Tank Panzer receives damage of 6, new health at'
-                + ' 84;Move was unsuccessfull;Tank Panzer gives damage of 4;Tank Soviet receives'
-                + ' damage of 4, new health at 66;Move was unsuccessfull;Tank Panzer gives'
-                + ' damage of 4;Tank Soviet receives damage of 4, new health at 62;Tank Panzer'
-                + ' has died;Move was unsuccessfull;';
-    let logArray = msg.replace(/;/g, '///n');
-    document.getElementById("battleEvents").innerHTML = logArray;*/
-
    let xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:8080/startgame');
     xhr.send();
@@ -111,6 +107,9 @@ function subscribeToEvents(battleId) {
             selBattleEvents.add(option);
             console.log('event: ' + msgArr[i]);
         }
+        if(msgArr.length == 0) {
+            eventSource.close();
+        }
     };
     eventSource.onopen = e => console.log('open');
     eventSource.onerror = e => {
@@ -120,8 +119,4 @@ function subscribeToEvents(battleId) {
             console.log(e);
         }
     };
-    //TODO: stop requests after battle is over
-    eventSource.addEventListener('second', function (e) {
-        console.log('second', e.data);
-    }, false);
 }

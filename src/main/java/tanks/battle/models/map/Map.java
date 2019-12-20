@@ -1,64 +1,41 @@
 package tanks.battle.models.map;
 
+import org.springframework.data.annotation.Id;
 import tanks.battle.models.tank.utils.Position;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Map {
-    int rowCount;
-    int columnCount;
+    @Id
+    String id;
     List<Row> rows;
+    private static int COUNTER = 0;
 
-    Position gatePosition;
+
+//TODO: Position gatePosition;
+
+    public Map() { }
 
     public Map(List<Row> rows) {
         if(rows == null) {
-            //throw error
+            System.out.println("Empty map!");
         }
         this.rows = rows;
-        this.rowCount = rows.size();
-        this.columnCount = rows.get(0).size();
+        this.id = "map-"+COUNTER;
+        COUNTER++;
     }
 
-    public int height() {
-        return this.rowCount;
+    public List<Row> getRows() {
+        return this.rows;
     }
 
-    public int width() {
-        return this.columnCount;
+    public int getHeight() {
+        return rows.size();
     }
 
-    public boolean clearShot(Position attackerTankPosition, Position victimTankPosition) {
-        ArrayList<Pair> projectileTrajectory = new ArrayList<>();
-        int diffX = Math.abs(attackerTankPosition.x() - victimTankPosition.x());
-        int diffY = Math.abs(attackerTankPosition.y() - victimTankPosition.y());
-
-        int stepX = attackerTankPosition.x() < victimTankPosition.x()? 1:-1;
-        int stepY = attackerTankPosition.y() < victimTankPosition.y()? 1:-1;
-
-        int currentX = attackerTankPosition.x();
-        int currentY = attackerTankPosition.y();
-
-        int movesCount = Math.max(diffX, diffY);
-        for(int i=0; i<movesCount; i++) {
-            currentX += (i < diffX) ? stepX:0;
-            currentY += (i < diffY) ? stepY:0;
-            projectileTrajectory.add(new Pair(currentX, currentY));
-        }
-
-//        System.out.println("Start = " + attackerTankPosition.x() + ", " + attackerTankPosition.y());
-//        System.out.println("End = " + victimTankPosition.x() + ", " + victimTankPosition.y());
-        for(Pair pair : projectileTrajectory) {
-//            System.out.println("X = " + pair.x + " Y = " + pair.y);
-            if(rows.get(pair.x).get(pair.y)) {
-                System.out.println("Obstacle found in path");
-                return false;
-            }
-        }
-//        System.out.println("Final = " + victimTankPosition.x() + ", " + victimTankPosition.y());
-//        System.out.println("Clear shot");
-        return true;
+    public int getWidth() {
+        return rows.get(0).size();
     }
 
     @Override
@@ -86,13 +63,4 @@ public class Map {
         return mapStr.toString();
     }
 
-    private class Pair {
-        int x;
-        int y;
-
-        Pair(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
 }

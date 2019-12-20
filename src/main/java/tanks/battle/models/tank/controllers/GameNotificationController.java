@@ -16,17 +16,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RestController
 @RequestMapping("/gamenotification")
 @CrossOrigin(origins = "*")
-public class SsePushNotificationRestController {
+public class GameNotificationController {
 
     @Autowired
-    SsePushNotificationService service;
+    GameNotificationService service;
 
     final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
-    @RequestMapping(method= RequestMethod.GET/*, produces = MediaType.TEXT_EVENT_STREAM_VALUE*/)
+    @RequestMapping(method= RequestMethod.GET)
     public ResponseEntity<SseEmitter> doNotify(@RequestParam(value = "id", defaultValue = "battle-0") String id,
-            @RequestHeader(value = "Content-Type", defaultValue = "text/event-stream") String contentType)
-            throws InterruptedException, IOException {
+            @RequestHeader(value = "Content-Type", defaultValue = "text/event-stream") String contentType) {
         final SseEmitter emitter = new SseEmitter();
         Battle battle = Battle.getBattleById(id);
         service.addEmitter(emitter);

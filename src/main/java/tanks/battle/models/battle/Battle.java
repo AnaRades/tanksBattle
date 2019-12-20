@@ -1,6 +1,8 @@
 package tanks.battle.models.battle;
 
 import java.util.HashMap;
+
+import tanks.battle.models.map.MapHandler;
 import tanks.battle.models.tank.*;
 import tanks.battle.models.map.Map;
 import tanks.battle.models.map.Row;
@@ -15,6 +17,11 @@ import java.util.Random;
 public class Battle extends Thread {
 
     private Map stalingradMap;
+
+    private TankConductor germanTankConductor;
+    private TankConductor sovietTankConductor;
+
+
     private Tank soviet;
     private Tank panzer;
 
@@ -49,16 +56,27 @@ public class Battle extends Thread {
 
         TankBuilder tankBuilder = new TankBuilder();
         soviet = tankBuilder.withName("Soviet").withDamage(30).withHealth(70)
-                .withFacing(FACING.BACKWARDS).withPosition(new Position(10, 7))
-                .withObserver(observer).build();
+                .withFacing(FACING.BACKWARDS).withPosition(new Position(10, 7)).build();
 
         tankBuilder = new TankBuilder();
         panzer = tankBuilder.withName("Panzer").withDamage(40).withHealth(90)
-                .withFacing(FACING.FORWARD).withPosition(new Position(2,7))
-                .withObserver(observer).build();
+                .withFacing(FACING.FORWARD).withPosition(new Position(2,7)).build();
 
-        panzer.setOtherTank(soviet);
-        soviet.setOtherTank(panzer);
+        germanTankConductor = new TankConductor();
+        germanTankConductor.setTank(panzer);
+
+        sovietTankConductor = new TankConductor();
+        sovietTankConductor.setTank(soviet);
+
+        germanTankConductor.setEnemyTankConductor(sovietTankConductor);
+        sovietTankConductor.setEnemyTankConductor(germanTankConductor);
+
+        germanTankConductor.setBattleObserver(observer);
+        sovietTankConductor.setBattleObserver(observer);
+
+        MapHandler mapHandler = new MapHandler(stalingradMap);
+        germanTankConductor.setMapHandler(mapHandler);
+        sovietTankConductor.setMapHandler(mapHandler);
     }
     public void startBattle() {
         try {
@@ -72,18 +90,18 @@ public class Battle extends Thread {
     public void run() {
         System.out.println("Start battle");
         boolean isSovietTurn = true;
-        Tank currentTank;
+        TankConductor currentTank;
         while(!soviet.isDead() && !panzer.isDead()) {
-            currentTank = isSovietTurn? soviet: panzer;
+            currentTank = isSovietTurn? sovietTankConductor: germanTankConductor;
 
 //          tank1 makes move1 -> roll dice -> if success make move, else do nothing
-            MOVE move = currentTank.makeNextMove(stalingradMap);
+            MOVE move = currentTank.makeNextMove();
             if(rollDice()) {
 //          if move = shoot -> tank1.shoot(tank2)
                 if (move.equals(MOVE.SHOOT)) {
                     currentTank.shoot();
                 } else if (move.equals(MOVE.ADVANCE)) {
-
+                    currentTank.advance();
                 }
                 observer.logEvent("Move was unsuccessfull");
             }

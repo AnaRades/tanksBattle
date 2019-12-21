@@ -43,5 +43,17 @@ public class GameController {
         return battle.getBattleId();
     }
 
+    public static void main(String[] args) {
+        Battle battle = new Battle();
+        battle.mockData();
+        battle.init();
+        battle.startBattle();
+
+        Battle battle2 = new Battle();
+        battle2.mockData();
+        battle2.init();
+        battle2.startBattle();
+    }
+
 }
 

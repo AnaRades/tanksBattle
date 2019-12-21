@@ -10,7 +10,7 @@ public  class Tank  {
     private int maxHealth;
     private int damage;
     private Position position;
-    private FACING facing;
+    private FACING orientation;
 
     protected Tank() {}
 
@@ -53,6 +53,16 @@ public  class Tank  {
     }
 
     public Position getPosition() { return this.position; }
+
+    public FACING getOrientation() { return this.orientation; }
+
+    public boolean isFacingForward() {
+        return  getOrientation().equals(FACING.FORWARD);
+    }
+
+    public void setOrientation(FACING facing) {
+        this.orientation = facing;
+    }
 
     @Override
     public String toString() {

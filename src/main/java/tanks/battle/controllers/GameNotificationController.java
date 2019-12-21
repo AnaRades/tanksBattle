@@ -1,6 +1,5 @@
 package tanks.battle.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,36 +8,21 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import tanks.battle.engine.Battle;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 @RestController
 @RequestMapping("/gamenotification")
 @CrossOrigin(origins = "*")
 public class GameNotificationController {
 
-    @Autowired
-    GameNotificationService service;
-
-    final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
-
     @RequestMapping(method= RequestMethod.GET)
-    public ResponseEntity<SseEmitter> doNotify(@RequestParam(value = "id", defaultValue = "battle-0") String id,
+    public ResponseEntity<SseEmitter> subscribeToBattleEvents(@RequestParam(value = "id", defaultValue = "battle-0") String id,
             @RequestHeader(value = "Content-Type", defaultValue = "text/event-stream") String contentType) {
         final SseEmitter emitter = new SseEmitter();
         Battle battle = Battle.getBattleById(id);
         if(battle == null) {
             return new ResponseEntity<>(emitter, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        service.addEmitter(emitter);
-        service.setBattle(battle);
-        service.doNotify();
-        emitter.onCompletion(() -> service.removeEmitter(emitter));
-        emitter.onTimeout(() -> service.removeEmitter(emitter));
+        battle.setEmitter(emitter);
 
-        if(battle.isGameOver()) {
-            service.stopService();
-        }
         return new ResponseEntity<>(emitter, HttpStatus.OK);
     }
 

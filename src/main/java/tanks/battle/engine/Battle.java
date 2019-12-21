@@ -1,6 +1,7 @@
 package tanks.battle.engine;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import tanks.battle.models.map.Map;
 import tanks.battle.models.map.MapHandler;
 import tanks.battle.models.map.Row;
@@ -11,6 +12,7 @@ import tanks.battle.utils.FACING;
 import tanks.battle.utils.MOVE;
 import tanks.battle.utils.Position;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,12 +34,20 @@ public class Battle extends Thread {
 
     private static int BATTLE_COUNT = 0;
     private static HashMap<String, Battle> currentBattles = new HashMap<>();
+
+    SseEmitter emitter;
     //TODO: create static list of battles
     //add id to battle
 
-    private Battle() {}
+    private boolean isTest;
+    public Battle() {
+        isTest = true;
+        id = "Battle-"+BATTLE_COUNT;
+        BATTLE_COUNT++;
+    }
 
     public Battle(Tank panzer, Tank soviet, Map stalingradMap) {
+        isTest = false;
         id = "Battle-"+BATTLE_COUNT;
         BATTLE_COUNT++;
 
@@ -53,7 +63,7 @@ public class Battle extends Thread {
         battle.startBattle();
     }
 
-    private void mockData() {
+    public void mockData() {
         TankBuilder tankBuilder = new TankBuilder();
         soviet = tankBuilder.withName("Soviet").withDamage(7).withHealth(70)
                 .withFacing(FACING.BACKWARDS).withPosition(new Position(8, 37)).build();
@@ -73,7 +83,7 @@ public class Battle extends Thread {
 
     public void init() {
         currentBattles.put(id, this);
-        this.observer = new BattleLog();
+        this.observer = new BattleLog(id);
         //TODO: refactor
         germanTankConductor = new TankConductor();
         germanTankConductor.setTank(panzer);
@@ -121,8 +131,17 @@ public class Battle extends Thread {
                 default:{}
             }
             isSovietTurn = !isSovietTurn;
-            System.out.println(observer.getLatestLog());
+            try {
+                if(emitter != null)
+                    emitter.send(SseEmitter.event().data(getLatestLog()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(isTest) {
+                System.out.println(observer.getLatestLog());
+            }
         }
+        emitter.complete();
         System.out.println("=====End battle");
     }
 
@@ -204,6 +223,10 @@ public class Battle extends Thread {
 
     public String getBattleId() {
         return id;
+    }
+
+    public void setEmitter(SseEmitter emitter) {
+        this.emitter = emitter;
     }
 
     public static Battle getBattleById(String id) {

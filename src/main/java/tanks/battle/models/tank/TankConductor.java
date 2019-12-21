@@ -58,7 +58,7 @@ public class TankConductor {
 
     public void duck() {
         //get nearest obstacle position
-        Position duckPosition = pathFinder.getNearestObstacle(mapHandler.getMap(), getTankPosition(), tank.getName().equalsIgnoreCase(Constants.PANZER));
+        Position duckPosition = pathFinder.getNearestObstacle(mapHandler.getMap(), getTankPosition(), tank.isFacingForward());
         if(duckPosition != null) {
             battleLog.logEvent(String.format("%s ducks at position %s", tank, duckPosition));
             //move in NSWE direction towards it

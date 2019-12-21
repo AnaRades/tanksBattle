@@ -46,6 +46,7 @@ public class TankBuilder {
         tank.setDamage(damage);
         tank.setPosition(position);
         tank.setMaxHealth(health);
+        tank.setOrientation(facing);
 
         return tank;
     }

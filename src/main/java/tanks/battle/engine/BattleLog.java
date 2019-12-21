@@ -6,15 +6,17 @@ public class BattleLog {
 
   private StringBuilder log;
   private StringBuilder latestLog;
+  private String prefix;
 
-  public BattleLog() {
+  public BattleLog(String battleId) {
     log = new StringBuilder();
     latestLog = new StringBuilder();
+    prefix = "[" + battleId+"] ";
   }
 
   public void logEvent(String event) {
-      latestLog.append(event).append(LINE_TERMINATOR);
-      log.append(latestLog).append(LINE_TERMINATOR);
+      latestLog.append(prefix).append(event).append(LINE_TERMINATOR);
+      log.append(prefix).append(latestLog).append(LINE_TERMINATOR);
   }
 
   public String getLog() {

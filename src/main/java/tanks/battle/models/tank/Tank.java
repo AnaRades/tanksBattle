@@ -1,15 +1,13 @@
 package tanks.battle.models.tank;
 
-import tanks.battle.models.battle.BattleObserver;
-import tanks.battle.models.map.Map;
-import tanks.battle.models.tank.utils.FACING;
-import tanks.battle.models.tank.utils.MOVE;
-import tanks.battle.models.tank.utils.Position;
+import tanks.battle.utils.FACING;
+import tanks.battle.utils.Position;
 
 public  class Tank  {
 
     private String name;
-    private int health;
+    private int currentHealth;
+    private int maxHealth;
     private int damage;
     private Position position;
     private FACING facing;
@@ -17,7 +15,7 @@ public  class Tank  {
     protected Tank() {}
 
     public boolean isDead() {
-        return health <= 0;
+        return currentHealth <= 0;
     }
 
     public String getName() {
@@ -25,12 +23,18 @@ public  class Tank  {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.currentHealth = health;
+    }
+
+    public void setMaxHealth(int health) {
+        this.maxHealth = health;
     }
 
     public int getHealth() {
-        return health;
+        return currentHealth;
     }
+
+    public int getMaxHealth() { return maxHealth; }
 
     public int getDamage() {
         return damage;
@@ -49,4 +53,9 @@ public  class Tank  {
     }
 
     public Position getPosition() { return this.position; }
+
+    @Override
+    public String toString() {
+        return String.format("Tank %s [%d, %d]", name, position.getX(), position.getY());
+    }
 }

@@ -1,4 +1,4 @@
-package tanks.battle.models.tank.utils;
+package tanks.battle.utils;
 
 public enum MOVE {
     SHOOT,

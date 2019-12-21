@@ -1,15 +1,15 @@
 package tanks.battle.models.tank;
 
-import tanks.battle.models.battle.BattleObserver;
-import tanks.battle.models.tank.utils.FACING;
-import tanks.battle.models.tank.utils.Position;
+import tanks.battle.engine.BattleLog;
+import tanks.battle.utils.FACING;
+import tanks.battle.utils.Position;
 
 public class TankBuilder {
     private String name = "Default Tank";
     private int health = 100;
     private int damage = 5;
     private FACING facing;
-    private BattleObserver battleObserver;
+    private BattleLog battleLog;
 
     private Position position = new Position(0,0);
 
@@ -45,6 +45,7 @@ public class TankBuilder {
         tank.setHealth(health);
         tank.setDamage(damage);
         tank.setPosition(position);
+        tank.setMaxHealth(health);
 
         return tank;
     }

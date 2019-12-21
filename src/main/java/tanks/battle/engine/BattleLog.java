@@ -1,18 +1,20 @@
-package tanks.battle.models.battle;
+package tanks.battle.engine;
 
-public class BattleObserver {
+import static tanks.battle.utils.Constants.LINE_TERMINATOR;
+
+public class BattleLog {
 
   private StringBuilder log;
   private StringBuilder latestLog;
 
-  public BattleObserver() {
+  public BattleLog() {
     log = new StringBuilder();
     latestLog = new StringBuilder();
   }
 
   public void logEvent(String event) {
-      latestLog.append(event).append(";");
-      log.append(latestLog).append(";");
+      latestLog.append(event).append(LINE_TERMINATOR);
+      log.append(latestLog).append(LINE_TERMINATOR);
   }
 
   public String getLog() {

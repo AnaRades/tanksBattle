@@ -1,19 +1,22 @@
-package tanks.battle.models.battle;
+package tanks.battle.engine;
 
-import java.util.HashMap;
-
-import tanks.battle.models.map.MapHandler;
-import tanks.battle.models.tank.*;
+import org.springframework.stereotype.Controller;
 import tanks.battle.models.map.Map;
+import tanks.battle.models.map.MapHandler;
 import tanks.battle.models.map.Row;
-import tanks.battle.models.tank.utils.FACING;
-import tanks.battle.models.tank.utils.MOVE;
-import tanks.battle.models.tank.utils.Position;
+import tanks.battle.models.tank.Tank;
+import tanks.battle.models.tank.TankBuilder;
+import tanks.battle.models.tank.TankConductor;
+import tanks.battle.utils.FACING;
+import tanks.battle.utils.MOVE;
+import tanks.battle.utils.Position;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+@Controller
 public class Battle extends Thread {
 
     private Map stalingradMap;
@@ -21,11 +24,10 @@ public class Battle extends Thread {
     private TankConductor germanTankConductor;
     private TankConductor sovietTankConductor;
 
-
     private Tank soviet;
     private Tank panzer;
 
-    private BattleObserver observer;
+    private BattleLog observer;
     private String id;
 
     private static int BATTLE_COUNT = 0;
@@ -33,35 +35,46 @@ public class Battle extends Thread {
     //TODO: create static list of battles
     //add id to battle
 
-    public Battle() {
+    private Battle() {}
+
+    public Battle(Tank panzer, Tank soviet, Map stalingradMap) {
         id = "Battle-"+BATTLE_COUNT;
         BATTLE_COUNT++;
-        observer = new BattleObserver();
+
+        this.panzer = panzer;
+        this.soviet = soviet;
+        setStalingradMap(stalingradMap);
     }
 
-
-    //to be replaced by a rest controller mapping
-    //will be one of the 3 commands it receives from the client
-    //get tank properties, get map, start battle
     public static void main(String[] args) {
         Battle battle = new Battle();
+        battle.mockData();
         battle.init();
         battle.startBattle();
     }
 
-    public void init() {
-
-        currentBattles.put(id, this);
-        stalingradMap = getStalingradMap();
-
+    private void mockData() {
         TankBuilder tankBuilder = new TankBuilder();
-        soviet = tankBuilder.withName("Soviet").withDamage(30).withHealth(70)
-                .withFacing(FACING.BACKWARDS).withPosition(new Position(10, 7)).build();
+        soviet = tankBuilder.withName("Soviet").withDamage(7).withHealth(70)
+                .withFacing(FACING.BACKWARDS).withPosition(new Position(8, 37)).build();
 
         tankBuilder = new TankBuilder();
-        panzer = tankBuilder.withName("Panzer").withDamage(40).withHealth(90)
+        panzer = tankBuilder.withName("Panzer").withDamage(10).withHealth(90)
                 .withFacing(FACING.FORWARD).withPosition(new Position(2,7)).build();
+        //TODO: refactor
+        germanTankConductor = new TankConductor();
+        germanTankConductor.setTank(panzer);
 
+        sovietTankConductor = new TankConductor();
+        sovietTankConductor.setTank(soviet);
+
+        setStalingradMap(generateRandomMap(10,40));
+    }
+
+    public void init() {
+        currentBattles.put(id, this);
+        this.observer = new BattleLog();
+        //TODO: refactor
         germanTankConductor = new TankConductor();
         germanTankConductor.setTank(panzer);
 
@@ -71,8 +84,8 @@ public class Battle extends Thread {
         germanTankConductor.setEnemyTankConductor(sovietTankConductor);
         sovietTankConductor.setEnemyTankConductor(germanTankConductor);
 
-        germanTankConductor.setBattleObserver(observer);
-        sovietTankConductor.setBattleObserver(observer);
+        germanTankConductor.setBattleLog(observer);
+        sovietTankConductor.setBattleLog(observer);
 
         MapHandler mapHandler = new MapHandler(stalingradMap);
         germanTankConductor.setMapHandler(mapHandler);
@@ -88,29 +101,32 @@ public class Battle extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Start battle");
+        System.out.println("=====Start battle");
         boolean isSovietTurn = true;
         TankConductor currentTank;
-        while(!soviet.isDead() && !panzer.isDead()) {
+        while(!isGameOver()) {
             currentTank = isSovietTurn? sovietTankConductor: germanTankConductor;
-
-//          tank1 makes move1 -> roll dice -> if success make move, else do nothing
             MOVE move = currentTank.makeNextMove();
-            if(rollDice()) {
-//          if move = shoot -> tank1.shoot(tank2)
-                if (move.equals(MOVE.SHOOT)) {
+            switch (move) {
+                case SHOOT: {
                     currentTank.shoot();
-                } else if (move.equals(MOVE.ADVANCE)) {
-                    currentTank.advance();
+                    break;
                 }
-                observer.logEvent("Move was unsuccessfull");
+                case ADVANCE: {
+                    currentTank.advanceToEnemy();
+                    break;
+                }
+                case DUCK:
+                    currentTank.duck();
+                default:{}
             }
-//            System.out.println(observer.getLatestLog());
             isSovietTurn = !isSovietTurn;
+            System.out.println(observer.getLatestLog());
         }
+        System.out.println("=====End battle");
     }
 
-    private static  Random random = new Random(100);
+    private static  Random random = new Random(System.currentTimeMillis());
     private static boolean rollDice() {
         return random.nextInt()%5 < 4;
     }
@@ -134,8 +150,28 @@ public class Battle extends Thread {
             .build();
     }
 
+    private static  Random dynamicRandom = new Random(System.currentTimeMillis());
+    private static  Random staticRandom = new Random(100);
+    public static Map generateRandomMap(int height, int width) {
+        List<Row> rows = new ArrayList<>(height);
+
+        for (int i = 0; i < height; i++) {
+            Row row = new Row();
+            for (int j = 0; j < width; j++) {
+                row.add((staticRandom.nextInt(300)%20)>17);
+            }
+            rows.add(row);
+        }
+        return new Map(rows);
+    }
+
+    private void setStalingradMap(Map map) {
+        this.stalingradMap = map;
+        System.out.println(this.stalingradMap.toStringWithTanks(panzer.getPosition(), soviet.getPosition()));
+    }
+
     public static Map getStalingradMap() {
-        ArrayList<Row> rows = new ArrayList<>(11);
+        List<Row> rows = new ArrayList<>();
 
         boolean[] row1 =   new boolean[]{true, true, true, false, false, false, false, false, true, true, true, true, false, false};
         boolean[] row2 =   new boolean[]{true, true, true, false, false, false, false, false, true, true, true, true, false, false};
@@ -159,7 +195,11 @@ public class Battle extends Thread {
     }
 
     public String getLatestLog() {
-        return  observer.getLatestLog();
+           return  isGameOver()?"Game over": observer.getLatestLog();
+    }
+
+    public boolean isGameOver() {
+        return (soviet.isDead() || panzer.isDead());
     }
 
     public String getBattleId() {

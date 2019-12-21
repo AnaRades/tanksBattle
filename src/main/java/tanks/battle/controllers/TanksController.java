@@ -2,11 +2,9 @@ package tanks.battle.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import tanks.battle.models.battle.Battle;
 import tanks.battle.models.tank.Tank;
 import tanks.mongo.TankRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

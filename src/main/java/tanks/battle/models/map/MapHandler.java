@@ -1,6 +1,6 @@
 package tanks.battle.models.map;
 
-import tanks.battle.models.tank.utils.Position;
+import tanks.battle.utils.Position;
 
 import java.util.ArrayList;
 
@@ -13,37 +13,39 @@ public class MapHandler {
         this.map = map;
     }
 
-    public boolean clearShot(Position attackerTankPosition, Position victimTankPosition) {
+    public Map getMap() { return  this.map; }
+
+    public int getShotDistance(Position attackerTankPosition, Position victimTankPosition) {
         ArrayList<Pair> projectileTrajectory = new ArrayList<>();
         int diffX = Math.abs(attackerTankPosition.getX() - victimTankPosition.getX());
         int diffY = Math.abs(attackerTankPosition.getY() - victimTankPosition.getY());
 
-        int stepX = attackerTankPosition.getX() < victimTankPosition.getX()? 1:-1;
-        int stepY = attackerTankPosition.getY() < victimTankPosition.getY()? 1:-1;
+        //projectile can only go NSWE
+        if (diffX > 0 && diffY > 0 && diffX != diffY) {
+            return -1;
+        }
+
+        int stepX = attackerTankPosition.getX() < victimTankPosition.getX() ? 1 : -1;
+        int stepY = attackerTankPosition.getY() < victimTankPosition.getY() ? 1 : -1;
 
         int currentX = attackerTankPosition.getX();
         int currentY = attackerTankPosition.getY();
 
         int movesCount = Math.max(diffX, diffY);
-        for(int i=0; i<movesCount; i++) {
-            currentX += (i < diffX) ? stepX:0;
-            currentY += (i < diffY) ? stepY:0;
+        for (int i = 0; i < movesCount; i++) {
+            currentX += (i < diffX) ? stepX : 0;
+            currentY += (i < diffY) ? stepY : 0;
             projectileTrajectory.add(new Pair(currentX, currentY));
         }
 
-//        System.out.println("Start = " + attackerTankPosition.x() + ", " + attackerTankPosition.y());
-//        System.out.println("End = " + victimTankPosition.x() + ", " + victimTankPosition.y());
-        for(Pair pair : projectileTrajectory) {
-//            System.out.println("X = " + pair.x + " Y = " + pair.y);
-            if(map.getRows().get(pair.x).get(pair.y)) {
-                System.out.println("Obstacle found in path");
-                return false;
+        for (Pair pair : projectileTrajectory) {
+            if (map.getRows().get(pair.x).get(pair.y)) {
+                return -1;
             }
         }
-//        System.out.println("Final = " + victimTankPosition.x() + ", " + victimTankPosition.y());
-//        System.out.println("Clear shot");
-        return true;
+        return movesCount;
     }
+
     private class Pair {
         int x;
         int y;

@@ -1,4 +1,4 @@
-package tanks.battle.models.tank.controllers;
+package tanks.battle.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,9 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import tanks.battle.models.battle.Battle;
+import tanks.battle.engine.Battle;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,11 +27,18 @@ public class GameNotificationController {
             @RequestHeader(value = "Content-Type", defaultValue = "text/event-stream") String contentType) {
         final SseEmitter emitter = new SseEmitter();
         Battle battle = Battle.getBattleById(id);
+        if(battle == null) {
+            return new ResponseEntity<>(emitter, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         service.addEmitter(emitter);
         service.setBattle(battle);
         service.doNotify();
         emitter.onCompletion(() -> service.removeEmitter(emitter));
         emitter.onTimeout(() -> service.removeEmitter(emitter));
+
+        if(battle.isGameOver()) {
+            service.stopService();
+        }
         return new ResponseEntity<>(emitter, HttpStatus.OK);
     }
 

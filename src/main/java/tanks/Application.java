@@ -7,13 +7,18 @@ import tanks.battle.models.map.Map;
 import tanks.battle.models.map.Row;
 import tanks.battle.models.tank.Tank;
 import tanks.battle.models.tank.TankBuilder;
-import tanks.battle.models.tank.utils.FACING;
-import tanks.battle.models.tank.utils.Position;
+import tanks.battle.utils.FACING;
+import tanks.battle.utils.Position;
 import tanks.mongo.MapRepository;
 import tanks.mongo.TankRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static tanks.battle.utils.Constants.PANZER;
+import static tanks.battle.utils.Constants.SOVIET;
 
 @SpringBootApplication
 public class Application {
@@ -24,20 +29,14 @@ public class Application {
 	@Autowired
 	private MapRepository mapRepositoryGame;
 
-
-
 	public static void main(String[] args) {
-
 		SpringApplication.run(Application.class, args);
-
-
 	}
 
 	@PostConstruct
 	public void init() {
 		enterGameData();
 	}
-
 
 	private void enterGameData() {
 		//clear data
@@ -46,31 +45,21 @@ public class Application {
 
 		// enter tank details
 		TankBuilder tankBuilder = new TankBuilder();
-		Tank soviet = tankBuilder.withName("Soviet").withDamage(30).withHealth(70)
+		Tank soviet = tankBuilder.withName(SOVIET).withDamage(3).withHealth(70)
 				.withFacing(FACING.BACKWARDS).withPosition(new Position(10, 7)).build();
 
 		tankBuilder = new TankBuilder();
-		Tank panzer = tankBuilder.withName("Panzer").withDamage(40).withHealth(90)
+		Tank panzer = tankBuilder.withName(PANZER).withDamage(4).withHealth(90)
 				.withFacing(FACING.FORWARD).withPosition(new Position(2,7)).build();
 		tankRepositoryGame.save(panzer);
 		tankRepositoryGame.save(soviet);
 
 		//enter map details
 		mapRepositoryGame.save(createGameMap());
-
-		// TBR: fetch all tanks
-		System.out.println("Tanks found with findAll():");
-		System.out.println("-------------------------------");
-		for (Tank tank : tankRepositoryGame.findAll()) {
-			System.out.println(tank.getName());
-		}
-		System.out.println();
-
-		// fetch a map by ID
-		System.out.println("Map found by ID:0 :");
-		System.out.println("--------------------------------");
-		System.out.println(mapRepositoryGame.findById("map-0").get());
-
+		mapRepositoryGame.save(generateRandomMap(10, 40));
+		mapRepositoryGame.save(generateRandomMap(10, 40));
+		mapRepositoryGame.save(generateRandomMap(10, 40));
+		mapRepositoryGame.save(generateRandomMap(10, 40));
 	}
 
 	private Map createGameMap() {
@@ -95,4 +84,18 @@ public class Application {
 		return new Map(rows);
 	}
 
+	private static Random dynamicRandom = new Random(System.currentTimeMillis());
+	private static  Random staticRandom = new Random(100);
+	private static Map generateRandomMap(int height, int width) {
+		List<Row> rows = new ArrayList<>(height);
+
+		for (int i = 0; i < height; i++) {
+			Row row = new Row();
+			for (int j = 0; j < width; j++) {
+				row.add((staticRandom.nextInt(300)%20)>17);
+			}
+			rows.add(row);
+		}
+		return new Map(rows);
+	}
 }

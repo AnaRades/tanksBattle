@@ -1,9 +1,9 @@
 package tanks.battle.models.map;
 
 import org.springframework.data.annotation.Id;
-import tanks.battle.models.tank.utils.Position;
+import org.springframework.http.InvalidMediaTypeException;
+import tanks.battle.utils.Position;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Map {
@@ -37,6 +37,44 @@ public class Map {
     public int getWidth() {
         return rows.get(0).size();
     }
+
+    public String toStringWithTanks(Position tank1, Position tank2) {
+        StringBuilder mapStr = new StringBuilder();
+
+        for(int i=0; i<rows.get(0).size(); i++) {
+            mapStr.append("|").append(i);
+        }
+        //top border
+//        String hborder = new String(new char[rows.get(0).size()*2+2]).replace("\0", "_");
+//        mapStr.append(hborder);
+        mapStr.append("\n");
+
+        //add cells
+        for(int i=0; i<rows.size(); i++) {
+            //left border
+            mapStr.append("|");
+            Row row = rows.get(i);
+            for(int j=0; j<row.size(); j++) {
+                if (tank1.hasCoordinates(i,j) || tank2.hasCoordinates(i,j)) {
+                    mapStr.append("X").append(j>9?" ":"");
+                } else {
+                    mapStr.append(row.get(j)?"O":" ").append(j>9?" ":"");
+                }
+                //right border
+                mapStr.append("|");
+            }
+            mapStr.append("\n");
+        }
+        //bottom border
+//        mapStr.append(hborder);
+
+        for(int i=0; i<rows.get(0).size(); i++) {
+            mapStr.append("|").append(i);
+        }
+
+        return mapStr.toString();
+    }
+
 
     @Override
     public String toString() {

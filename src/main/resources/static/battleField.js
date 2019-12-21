@@ -93,8 +93,6 @@ function startGame() {
     xhr.onerror = function () {
         alert("Request failed");
     };
-
-    subscribeToEvents('dsa');
 }
 
 function subscribeToEvents(battleId) {
@@ -107,7 +105,7 @@ function subscribeToEvents(battleId) {
             selBattleEvents.add(option);
             console.log('event: ' + msgArr[i]);
         }
-        if(msgArr.length == 0) {
+        if(e.data == 'Game over') {
             eventSource.close();
         }
     };

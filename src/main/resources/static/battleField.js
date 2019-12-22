@@ -11,7 +11,7 @@ function init() {
 
 function getTanksList() {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8080/gettanks');
+    xhr.open('GET', '/gettanks');
     xhr.send();
 
     xhr.onreadystatechange = function () {
@@ -39,15 +39,15 @@ function populateTankList(tanksList) {
 
 function getTankProperties() {
     let xhr = new XMLHttpRequest();
-    var tankUrl = 'http://localhost:8080/gettanks/' + tankSelect.value;
+    var tankUrl = '/gettanks/' + tankSelect.value;
     xhr.open('GET', tankUrl);
     xhr.send();
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var tank = JSON.parse(this.responseText);
-            var txt = "Tank " + tank.name + " has damage " + tank.damage + " and totalHealth "
-                      + tank.health;
+            var txt = "Tank " + tank.name + " has damage " + tank.damage + ", max health "
+                      + tank.health + ", orientation " + tank.orientation;
             tankDetails.innerHTML = txt;
         }
     }
@@ -59,7 +59,7 @@ function getTankProperties() {
 
 function getMapDetails() {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8080/getmap');
+    xhr.open('GET', '/getmap');
     xhr.send();
 
     xhr.onreadystatechange = function () {
@@ -80,7 +80,7 @@ function getMapDetails() {
 **/
 function startGame() {
    let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8080/startgame');
+    xhr.open('POST', '/startgame');
     xhr.send();
 
     xhr.onreadystatechange = function () {
@@ -96,13 +96,14 @@ function startGame() {
 }
 
 function subscribeToEvents(battleId) {
-    const eventSource = new EventSource('http://localhost:8080/gamenotification?id='+battleId);
+    const eventSource = new EventSource('/gamenotification?id='+battleId);
     eventSource.onmessage = e => {
         const msgArr = e.data.split(';');
         for (var i = 0; i < msgArr.length; i++) {
             var option = document.createElement("option");
             option.text = msgArr[i];
             selBattleEvents.add(option);
+            selBattleEvents.value = option;
             console.log('event: ' + msgArr[i]);
         }
         if(e.data == 'Game over') {

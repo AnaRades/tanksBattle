@@ -1,6 +1,6 @@
 package tanks.battle.models.tank;
 
-import tanks.battle.engine.BattleLog;
+import tanks.battle.models.battle.BattleLog;
 import tanks.battle.utils.FACING;
 import tanks.battle.utils.Position;
 

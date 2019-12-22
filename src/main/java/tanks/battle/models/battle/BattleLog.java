@@ -1,4 +1,4 @@
-package tanks.battle.engine;
+package tanks.battle.models.battle;
 
 import static tanks.battle.utils.Constants.LINE_TERMINATOR;
 

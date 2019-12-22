@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import tanks.battle.engine.Battle;
+import tanks.Game;
+import tanks.battle.models.battle.Battle;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/gamenotification")
@@ -15,13 +18,14 @@ public class GameNotificationController {
 
     @RequestMapping(method= RequestMethod.GET)
     public ResponseEntity<SseEmitter> subscribeToBattleEvents(@RequestParam(value = "id", defaultValue = "battle-0") String id,
-            @RequestHeader(value = "Content-Type", defaultValue = "text/event-stream") String contentType) {
+            @RequestHeader(value = "Content-Type", defaultValue = "text/event-stream") String contentType, HttpSession session) {
+
         final SseEmitter emitter = new SseEmitter();
-        Battle battle = Battle.getBattleById(id);
+        Battle battle = Game.getBattleBySessionId(session.getId());
         if(battle == null) {
             return new ResponseEntity<>(emitter, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        battle.setEmitter(emitter);
+        battle.setSseEmitter(emitter);
 
         return new ResponseEntity<>(emitter, HttpStatus.OK);
     }

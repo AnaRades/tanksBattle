@@ -22,36 +22,39 @@ public class Position {
     }
 
     public Position moveEast() {
-        return new Position(x, y+1);
+        return new Position(x, y + 1);
     }
 
     public Position moveWest() {
-        return new Position(x,y-1);
+        return new Position(x, y - 1);
     }
 
     public Position moveNorth() {
-       return new Position(x-1,y);
+        return new Position(x - 1, y);
     }
 
     public Position moveSouth() {
-        return new Position(x+1,y);
+        return new Position(x + 1, y);
     }
 
+    /*
+    * Utility methods to help the tank get unblocked
+    * */
     public Position moveForward(int vLimit, int hLimit) {
-        if(x<vLimit-1) {
+        if (x < vLimit - 1) {
             return moveSouth();
         }
-        if(y<hLimit-1) {
+        if (y < hLimit - 1) {
             return moveEast();
         }
         return moveNorth();
     }
 
     public Position moveBackward() {
-        if(x>0) {
+        if (x > 0) {
             return moveNorth();
         }
-        if(y>0) {
+        if (y > 0) {
             return moveWest();
         }
         return moveSouth();
@@ -59,13 +62,13 @@ public class Position {
 
     @Override
     public String toString() {
-        return  String.format("(%d, %d)", x, y);
+        return String.format("(%d, %d)", x, y);
     }
 
     @Override
     public boolean equals(Object otherPosition) {
-        if(!(otherPosition instanceof Position))
+        if (!(otherPosition instanceof Position))
             return false;
-        return (x == ((Position)otherPosition).x && y == ((Position)otherPosition).y);
+        return (x == ((Position) otherPosition).x && y == ((Position) otherPosition).y);
     }
 }

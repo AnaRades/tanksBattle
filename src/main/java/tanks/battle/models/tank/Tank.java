@@ -14,10 +14,6 @@ public  class Tank  {
 
     protected Tank() {}
 
-    public boolean isDead() {
-        return currentHealth <= 0;
-    }
-
     public String getName() {
         return name;
     }
@@ -67,5 +63,13 @@ public  class Tank  {
     @Override
     public String toString() {
         return String.format("Tank %s [%d, %d]", name, position.getX(), position.getY());
+    }
+
+    @Override
+    public Tank clone() {
+        return new TankBuilder().withDamage(damage).withFacing(orientation)
+                                .withHealth(maxHealth).withName(name)
+                                .withPosition(position)
+                                .build();
     }
 }

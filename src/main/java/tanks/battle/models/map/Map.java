@@ -10,10 +10,8 @@ public class Map {
     @Id
     String id;
     List<Row> rows;
+
     private static int COUNTER = 0;
-
-
-//TODO: Position gatePosition;
 
     public Map() { }
 
@@ -38,15 +36,15 @@ public class Map {
         return rows.get(0).size();
     }
 
+    /**
+     * @return String representation of map with tank positions marked
+     */
     public String toStringWithTanks(Position tank1, Position tank2) {
         StringBuilder mapStr = new StringBuilder();
 
         for(int i=0; i<rows.get(0).size(); i++) {
             mapStr.append("|").append(i);
         }
-        //top border
-//        String hborder = new String(new char[rows.get(0).size()*2+2]).replace("\0", "_");
-//        mapStr.append(hborder);
         mapStr.append("\n");
 
         //add cells
@@ -65,8 +63,6 @@ public class Map {
             }
             mapStr.append("\n");
         }
-        //bottom border
-//        mapStr.append(hborder);
 
         for(int i=0; i<rows.get(0).size(); i++) {
             mapStr.append("|").append(i);
@@ -101,4 +97,5 @@ public class Map {
         return mapStr.toString();
     }
 
+    public String getId() { return id; }
 }

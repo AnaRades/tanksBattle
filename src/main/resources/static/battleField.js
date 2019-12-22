@@ -103,7 +103,7 @@ function subscribeToEvents(battleId) {
             var option = document.createElement("option");
             option.text = msgArr[i];
             selBattleEvents.add(option);
-            selBattleEvents.value = option;
+            selBattleEvents.options[selBattleEvents.options.length-1].selected = true;
             console.log('event: ' + msgArr[i]);
         }
         if(e.data == 'Game over') {

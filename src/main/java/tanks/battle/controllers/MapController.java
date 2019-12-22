@@ -23,11 +23,10 @@ public class MapController {
 
     @RequestMapping(method= RequestMethod.GET)
     public String displayMap(HttpSession session) {
-        String mapId = Game.getBattleBySessionId(session.getId()).getStalingradMap().getId();
-        Optional<Map> map = mapRepository.findById(mapId);
-        if(!map.isPresent()) {
-            return mapRepository.findAll().get(0).toString();
+        if(Game.getBattleBySessionId(session.getId()) != null) {
+            String mapId = Game.getBattleBySessionId(session.getId()).getStalingradMap().getId();
+            return mapRepository.findById(mapId).get().toString();
         }
-        return map.get().toString();
+        return mapRepository.findAll().get(0).toString();
     }
 }
